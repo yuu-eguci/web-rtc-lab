@@ -26,7 +26,7 @@
 
       <div class="row">
         <div class="col-md-3 mt-3">
-          <button class="btn btn-info btn-block">
+          <button class="btn btn-info btn-block" onclick="foo();">
             getSupportedConstraints
           </button>
         </div>
@@ -71,7 +71,8 @@
 
     const foo = function () {
 
-      // TODO: navigator.mediaDevices.getSupportedConstraints 実行して画面表示。
+      const supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+      $('p#getSupportedConstraints').html(JSON.stringify(supportedConstraints));
 
     };
 
