@@ -25,21 +25,41 @@
           </video>
         </div>
 
-        <div class="col-md-3" style="height: 150px; background-color: black; display: none;">
-          <video autoplay class="w-100 h-100 redundant-video">
-          </video>
+        <div class="card col-md-3 mt-3" style="display: none;">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">attr なし</h6>
+            <div style="height: 150px; background-color: black;">
+              <video class="w-100 h-100 redundant-video">
+              </video>
+            </div>
+          </div>
         </div>
-        <div class="col-md-3" style="height: 150px; background-color: black; display: none;">
-          <video autoplay class="w-100 h-100 redundant-video">
-          </video>
+        <div class="card col-md-3 mt-3" style="display: none;">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">autoplay あり</h6>
+            <div style="height: 150px; background-color: black;">
+              <video autoplay class="w-100 h-100 redundant-video">
+              </video>
+            </div>
+          </div>
         </div>
-        <div class="col-md-3" style="height: 150px; background-color: black; display: none;">
-          <video autoplay class="w-100 h-100 redundant-video">
-          </video>
+        <div class="card col-md-3 mt-3" style="display: none;">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">autoplay muted あり</h6>
+            <div style="height: 150px; background-color: black;">
+              <video autoplay muted class="w-100 h-100 redundant-video">
+              </video>
+            </div>
+          </div>
         </div>
-        <div class="col-md-3" style="height: 150px; background-color: black; display: none;">
-          <video autoplay class="w-100 h-100 redundant-video">
-          </video>
+        <div class="card col-md-3 mt-3" style="display: none;">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">autoplay muted playsinline あり</h6>
+            <div style="height: 150px; background-color: black;">
+              <video autoplay muted playsinline class="w-100 h-100 redundant-video">
+              </video>
+            </div>
+          </div>
         </div>
 
         <div class="col-md-3 mt-3">
@@ -174,7 +194,7 @@
         for (const el of $('video.redundant-video')) {
           console.info(stream);
           el.srcObject = stream;
-          $(el).parent().show();
+          $(el).parent().parent().parent().show();
         }
       } catch (err) {
         alert(err);
