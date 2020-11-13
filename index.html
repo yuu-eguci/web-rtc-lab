@@ -13,18 +13,35 @@
 </head>
 
 <body>
-    <main role="main" class="m-3">
-      <div class="bg-light" style="height: 200px;">
-        <video id="video1" autoplay class="w-100 h-100">
-        </video>
-      </div>
-
-      <div class="bg-light mt-3" style="height: 200px;">
-        <video id="video2" autoplay class="w-100 h-100">
-        </video>
-      </div>
-
+    <main role="main" class="ml-3 mr-3 mb-3">
       <div class="row">
+        <div class="col-md-6 mt-3" style="height: 200px; background-color: black;">
+          <video id="video1" autoplay class="w-100 h-100">
+          </video>
+        </div>
+
+        <div class="col-md-6 mt-3" style="height: 200px; background-color: black;">
+          <video id="video2" autoplay class="w-100 h-100">
+          </video>
+        </div>
+
+        <div class="col-md-3" style="height: 150px; background-color: black; display: none;">
+          <video autoplay class="w-100 h-100 redundant-video">
+          </video>
+        </div>
+        <div class="col-md-3" style="height: 150px; background-color: black; display: none;">
+          <video autoplay class="w-100 h-100 redundant-video">
+          </video>
+        </div>
+        <div class="col-md-3" style="height: 150px; background-color: black; display: none;">
+          <video autoplay class="w-100 h-100 redundant-video">
+          </video>
+        </div>
+        <div class="col-md-3" style="height: 150px; background-color: black; display: none;">
+          <video autoplay class="w-100 h-100 redundant-video">
+          </video>
+        </div>
+
         <div class="col-md-3 mt-3">
           <button class="btn btn-info btn-block" onclick="foo();">
             getSupportedConstraints
@@ -43,6 +60,11 @@
         <div class="col-md-3 mt-3">
           <button class="btn btn-info btn-block" onclick="qux();">
             Stop stream
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-danger btn-block" onclick="quux();">
+            意味もなく映像を増やす
           </button>
         </div>
       </div>
@@ -120,13 +142,17 @@
 
     const qux = function () {
 
-      const stream1 = document.getElementById('video1').srcObject;
-      const stream2 = document.getElementById('video2').srcObject;
-      if (stream1) {
-        stopStream(document.getElementById('video1').srcObject);
-      }
-      if (stream2) {
-        stopStream(document.getElementById('video2').srcObject);
+      try {
+        const stream1 = document.getElementById('video1').srcObject;
+        const stream2 = document.getElementById('video2').srcObject;
+        if (stream1) {
+          stopStream(document.getElementById('video1').srcObject);
+        }
+        if (stream2) {
+          stopStream(document.getElementById('video2').srcObject);
+        }
+      } catch (err) {
+        alert(err);
       }
 
     };
@@ -138,6 +164,21 @@
       tracks.forEach(function (track) {
         track.stop();
       });
+
+    };
+
+    const quux = function () {
+
+      try {
+        const stream = document.getElementById('video1').srcObject;
+        for (const el of $('video.redundant-video')) {
+          console.info(stream);
+          el.srcObject = stream;
+          $(el).parent().show();
+        }
+      } catch (err) {
+        alert(err);
+      }
 
     };
 
