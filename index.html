@@ -71,8 +71,12 @@
 
     const foo = function () {
 
-      const supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
-      $('p#getSupportedConstraints').html(JSON.stringify(supportedConstraints));
+      try {
+        const supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+        $('p#getSupportedConstraints').html(JSON.stringify(supportedConstraints));
+      } catch (err) {
+        alert(err);
+      }
 
     };
 
