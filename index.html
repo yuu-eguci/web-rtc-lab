@@ -25,6 +25,11 @@
           </video>
         </div>
 
+        <div class="col-md-6 mt-3" style="height: 200px; background-color: black;">
+          <video id="video3" autoplay playsinline class="w-100 h-100">
+          </video>
+        </div>
+
         <div class="card col-md-3 mt-3" style="display: none;">
           <div class="card-body">
             <h6 class="card-subtitle mb-2 text-muted">Type:user attr なし</h6>
@@ -118,6 +123,11 @@
         <div class="col-md-3 mt-3">
           <button class="btn btn-info btn-block" onclick="baz();">
             facingMode:environment
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-info btn-block" onclick="grault();">
+            for iOS
           </button>
         </div>
         <div class="col-md-3 mt-3">
@@ -259,6 +269,22 @@
           el.srcObject = stream;
           $(el).parent().parent().parent().show();
         }
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const grault = async function () {
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            facingMode: 'user',
+          },
+        });
+        document.getElementById('video3').srcObject = stream;
       } catch (err) {
         alert(err);
       }
