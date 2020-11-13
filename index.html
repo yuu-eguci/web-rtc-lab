@@ -265,7 +265,6 @@
       try {
         const stream = document.getElementById('video2').srcObject;
         for (const el of $('video.redundant-video-2')) {
-          console.info(stream);
           el.srcObject = stream;
           $(el).parent().parent().parent().show();
         }
@@ -281,6 +280,7 @@
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: false,
           video: {
+            aspectRatio: 1.777777,
             facingMode: 'user',
           },
         });
