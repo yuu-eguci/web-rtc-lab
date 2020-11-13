@@ -27,36 +27,73 @@
 
         <div class="card col-md-3 mt-3" style="display: none;">
           <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">attr なし</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Type:user attr なし</h6>
             <div style="height: 150px; background-color: black;">
-              <video class="w-100 h-100 redundant-video">
+              <video class="w-100 h-100 redundant-video-1">
               </video>
             </div>
           </div>
         </div>
         <div class="card col-md-3 mt-3" style="display: none;">
           <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">autoplay あり</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Type:user autoplay あり</h6>
             <div style="height: 150px; background-color: black;">
-              <video autoplay class="w-100 h-100 redundant-video">
+              <video autoplay class="w-100 h-100 redundant-video-1">
               </video>
             </div>
           </div>
         </div>
         <div class="card col-md-3 mt-3" style="display: none;">
           <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">autoplay muted あり</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Type:user autoplay muted あり</h6>
             <div style="height: 150px; background-color: black;">
-              <video autoplay muted class="w-100 h-100 redundant-video">
+              <video autoplay muted class="w-100 h-100 redundant-video-1">
               </video>
             </div>
           </div>
         </div>
         <div class="card col-md-3 mt-3" style="display: none;">
           <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">autoplay muted playsinline あり</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Type:user autoplay muted playsinline あり</h6>
             <div style="height: 150px; background-color: black;">
-              <video autoplay muted playsinline class="w-100 h-100 redundant-video">
+              <video autoplay muted playsinline class="w-100 h-100 redundant-video-1">
+              </video>
+            </div>
+          </div>
+        </div>
+
+        <div class="card col-md-3 mt-3" style="display: none;">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">Type:env attr なし</h6>
+            <div style="height: 150px; background-color: black;">
+              <video class="w-100 h-100 redundant-video-2">
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="card col-md-3 mt-3" style="display: none;">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">Type:env autoplay あり</h6>
+            <div style="height: 150px; background-color: black;">
+              <video autoplay class="w-100 h-100 redundant-video-2">
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="card col-md-3 mt-3" style="display: none;">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">Type:env autoplay muted あり</h6>
+            <div style="height: 150px; background-color: black;">
+              <video autoplay muted class="w-100 h-100 redundant-video-2">
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="card col-md-3 mt-3" style="display: none;">
+          <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">Type:env autoplay muted playsinline あり</h6>
+            <div style="height: 150px; background-color: black;">
+              <video autoplay muted playsinline class="w-100 h-100 redundant-video-2">
               </video>
             </div>
           </div>
@@ -84,7 +121,12 @@
         </div>
         <div class="col-md-3 mt-3">
           <button class="btn btn-danger btn-block" onclick="quux();">
-            意味もなく映像を増やす
+            facingMode:user を増やす
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-danger btn-block" onclick="corge();">
+            facingMode:environment を増やす
           </button>
         </div>
       </div>
@@ -191,7 +233,22 @@
 
       try {
         const stream = document.getElementById('video1').srcObject;
-        for (const el of $('video.redundant-video')) {
+        for (const el of $('video.redundant-video-1')) {
+          console.info(stream);
+          el.srcObject = stream;
+          $(el).parent().parent().parent().show();
+        }
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const corge = function () {
+
+      try {
+        const stream = document.getElementById('video2').srcObject;
+        for (const el of $('video.redundant-video-2')) {
           console.info(stream);
           el.srcObject = stream;
           $(el).parent().parent().parent().show();
