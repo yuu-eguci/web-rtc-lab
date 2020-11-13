@@ -279,11 +279,7 @@
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: false,
-          video: {
-            width: { min: 640, max: 1920 },
-            height: { min: 360, max: 1080 },
-            facingMode: 'user',
-          },
+          video: true,
         });
         document.getElementById('video3').srcObject = stream;
       } catch (err) {
