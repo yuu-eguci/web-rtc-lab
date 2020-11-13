@@ -31,17 +31,17 @@
           </button>
         </div>
         <div class="col-md-3 mt-3">
-          <button class="btn btn-info btn-block">
+          <button class="btn btn-info btn-block" onclick="bar();">
             facingMode:user
           </button>
         </div>
         <div class="col-md-3 mt-3">
-          <button class="btn btn-info btn-block">
+          <button class="btn btn-info btn-block" onclick="baz();">
             facingMode:environment
           </button>
         </div>
         <div class="col-md-3 mt-3">
-          <button class="btn btn-info btn-block">
+          <button class="btn btn-info btn-block" onclick="qux();">
             Stop stream
           </button>
         </div>
@@ -80,21 +80,64 @@
 
     };
 
-    const bar = function () {
+    const bar = async function () {
 
-      // TODO: facingMode:user で navigator.mediaDevices.getUserMedia 実行。
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            aspectRatio: 1.777777,
+            width: { min: 640, max: 1920 },
+            height: { min: 360, max: 1080 },
+            facingMode: 'user',
+          },
+        });
+        document.getElementById('video1').srcObject = stream;
+      } catch (err) {
+        alert(err);
+      }
 
     };
 
-    const baz = function () {
+    const baz = async function () {
 
-      // TODO: facingMode:environment で navigator.mediaDevices.getUserMedia 実行。
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            aspectRatio: 1.777777,
+            width: { min: 640, max: 1920 },
+            height: { min: 360, max: 1080 },
+            facingMode: 'environment',
+          },
+        });
+        document.getElementById('video2').srcObject = stream;
+      } catch (err) {
+        alert(err);
+      }
 
     };
 
     const qux = function () {
 
-      // TODO: stream 停止。
+      const stream1 = document.getElementById('video1').srcObject;
+      const stream2 = document.getElementById('video2').srcObject;
+      if (stream1) {
+        stopStream(document.getElementById('video1').srcObject);
+      }
+      if (stream2) {
+        stopStream(document.getElementById('video2').srcObject);
+      }
+
+    };
+
+    const stopStream = function (stream) {
+
+      const tracks = stream.getTracks();
+
+      tracks.forEach(function (track) {
+        track.stop();
+      });
 
     };
 
