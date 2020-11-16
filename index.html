@@ -201,6 +201,10 @@
 
     const bar = async function () {
 
+      if (document.getElementById('video1').srcObject !== null) {
+        return;
+      }
+
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: false,
@@ -229,6 +233,10 @@
     };
 
     const baz = async function () {
+
+      if (document.getElementById('video2').srcObject !== null) {
+        return;
+      }
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -266,12 +274,15 @@
         const stream3 = document.getElementById('video3').srcObject;
         if (stream1) {
           stopStream(document.getElementById('video1').srcObject);
+          document.getElementById('video1').srcObject = null;
         }
         if (stream2) {
           stopStream(document.getElementById('video2').srcObject);
+          document.getElementById('video2').srcObject = null;
         }
         if (stream3) {
           stopStream(document.getElementById('video3').srcObject);
+          document.getElementById('video3').srcObject = null;
         }
       } catch (err) {
         alert(err);
@@ -303,6 +314,10 @@
     };
 
     const grault = async function () {
+
+      if (document.getElementById('video3').srcObject !== null) {
+        return;
+      }
 
       // NOTE: iOS Safari では……
       // aspectRatio: 1.77 だと env のカメラが使われてしまう。
