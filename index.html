@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+  <title>web-rtc-lab!</title>
+</head>
+
+<body>
+    <main role="main" class="ml-3 mr-3 mb-3">
+      <div class="row">
+        <div class="col-md-6 mt-3" style="height: 200px; background-color: black;">
+          <video id="video1" autoplay playsinline class="w-100 h-100">
+          </video>
+        </div>
+
+        <div class="col-md-6 mt-3">
+          <div class="row">
+            <div class="col-md-6 bg-secondary" style="height: 100px;">
+              <div>
+                autoplay
+              </div>
+              <video autoplay class="video1-clone w-100 h-100">
+              </video>
+            </div>
+            <div class="col-md-6 bg-secondary" style="height: 100px;">
+              <div>
+                autoplay playsinline
+              </div>
+              <video autoplay playsinline class="video1-clone w-100 h-100">
+              </video>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-info btn-block" onclick="foo();">
+            getSupportedConstraints
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-info btn-block" onclick="bar();">
+            facingMode:user
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-danger btn-block" onclick="bar2();">
+            facingMode:user を増やす
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-info btn-block" onclick="baz();">
+            facingMode:environment
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-info btn-block" onclick="grault();">
+            for iOS
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-info btn-block" onclick="qux();">
+            Stop stream
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-danger btn-block" onclick="quux();">
+            facingMode:user を増やす
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-danger btn-block" onclick="corge();">
+            facingMode:environment を増やす
+          </button>
+        </div>
+      </div>
+
+      <div class="card mt-3">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">getSupportedConstraints</h6>
+          <p id="getSupportedConstraints" class="card-text">
+          </p>
+        </div>
+      </div>
+
+    </main>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+
+  <script>
+
+    $(function () {
+
+      // Initialize something.
+
+    });
+
+    const foo = function () {
+
+      try {
+        const supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+        $('p#getSupportedConstraints').html(JSON.stringify(supportedConstraints));
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const bar = async function () {
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            facingMode: 'user',
+          },
+        });
+        document.getElementById('video1').srcObject = stream;
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const bar2 = function () {
+
+      try {
+        const stream = document.getElementById('video1').srcObject;
+        for (const el of $('video.video1-clone')) {
+          console.info(stream);
+          el.srcObject = stream;
+          $(el).parent().parent().parent().show();
+        }
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const baz = async function () {
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: {
+            aspectRatio: 1.777777,
+            width: { min: 640, max: 1920 },
+            height: { min: 360, max: 1080 },
+            facingMode: 'environment',
+          },
+        });
+        document.getElementById('video2').srcObject = stream;
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const qux = function () {
+
+      try {
+        const stream1 = document.getElementById('video1').srcObject;
+        const stream2 = document.getElementById('video2').srcObject;
+        if (stream1) {
+          stopStream(document.getElementById('video1').srcObject);
+        }
+        if (stream2) {
+          stopStream(document.getElementById('video2').srcObject);
+        }
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const stopStream = function (stream) {
+
+      const tracks = stream.getTracks();
+
+      tracks.forEach(function (track) {
+        track.stop();
+      });
+
+    };
+
+    const quux = function () {
+
+      try {
+        const stream = document.getElementById('video1').srcObject;
+        for (const el of $('video.redundant-video-1')) {
+          console.info(stream);
+          el.srcObject = stream;
+          $(el).parent().parent().parent().show();
+        }
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const corge = function () {
+
+      try {
+        const stream = document.getElementById('video2').srcObject;
+        for (const el of $('video.redundant-video-2')) {
+          el.srcObject = stream;
+          $(el).parent().parent().parent().show();
+        }
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const grault = async function () {
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: true,
+        });
+        document.getElementById('video3').srcObject = stream;
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+  </script>
+</body>
+
+</html>
