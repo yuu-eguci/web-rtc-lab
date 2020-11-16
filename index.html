@@ -293,7 +293,10 @@
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: false,
-          video: true,
+          video: {
+            aspectRatio: 1.777777,
+            facingMode: 'user',
+          },
         });
         document.getElementById('video3').srcObject = stream;
       } catch (err) {
