@@ -38,7 +38,35 @@
             </div>
           </div>
         </div>
+      </div>
 
+      <div class="row">
+        <div class="col-md-6 mt-3" style="height: 200px; background-color: black;">
+          <video id="video2" autoplay playsinline class="w-100 h-100">
+          </video>
+        </div>
+
+        <div class="col-md-6 mt-3">
+          <div class="row">
+            <div class="col-md-6 bg-secondary" style="height: 100px;">
+              <div>
+                autoplay
+              </div>
+              <video autoplay class="video2-clone w-100 h-100">
+              </video>
+            </div>
+            <div class="col-md-6 bg-secondary" style="height: 100px;">
+              <div>
+                autoplay playsinline
+              </div>
+              <video autoplay playsinline class="video2-clone w-100 h-100">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
         <div class="col-md-3 mt-3">
           <button class="btn btn-info btn-block" onclick="foo();">
             getSupportedConstraints
@@ -51,12 +79,17 @@
         </div>
         <div class="col-md-3 mt-3">
           <button class="btn btn-danger btn-block" onclick="bar2();">
-            facingMode:user を増やす
+            facingMode:user +
           </button>
         </div>
         <div class="col-md-3 mt-3">
           <button class="btn btn-info btn-block" onclick="baz();">
-            facingMode:environment
+            facingMode:env
+          </button>
+        </div>
+        <div class="col-md-3 mt-3">
+          <button class="btn btn-danger btn-block" onclick="baz2();">
+            facingMode:env +
           </button>
         </div>
         <div class="col-md-3 mt-3">
@@ -158,6 +191,21 @@
           },
         });
         document.getElementById('video2').srcObject = stream;
+      } catch (err) {
+        alert(err);
+      }
+
+    };
+
+    const baz2 = function () {
+
+      try {
+        const stream = document.getElementById('video2').srcObject;
+        for (const el of $('video.video2-clone')) {
+          console.info(stream);
+          el.srcObject = stream;
+          $(el).parent().parent().parent().show();
+        }
       } catch (err) {
         alert(err);
       }
