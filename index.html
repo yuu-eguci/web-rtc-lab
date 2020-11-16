@@ -59,7 +59,7 @@
                   Take photo
                 </div>
                 <div class="card-body p-0 bg-dark" style="height: 100px;">
-                  🚧
+                  <img id="image-for-video1">
                 </div>
               </div>
             </div>
@@ -324,7 +324,35 @@
 
     const takePhoto = function () {
 
-      console.info('take photo');
+      // これは base64 取得の実験も兼ねているので……
+      // - canvas に stream からフレームを貼り付け。
+      // - その canvas からデータを base64 で取り出す。
+
+      // 各要素です。
+      const videoElement = document.getElementById('video1');
+      const canvasElement = document.createElement('canvas');
+
+      // video の大きさを取得します。
+      const videoWidth = videoElement.offsetWidth * 0.5;
+      const videoHeight = videoElement.offsetHeight * 0.5;
+
+      // canvas の大きさを video と合わせます。
+      canvasElement.setAttribute('width', videoWidth);
+      canvasElement.setAttribute('height', videoHeight);
+
+      // video -> canvas 書き出します。
+      canvasElement.getContext('2d').drawImage(videoElement, 0, 0, videoWidth, videoHeight);
+
+      // base64 に変換します。
+      const base64Image = canvasElement.toDataURL('image/jpg');
+
+      // base64 の prefix を削除するならこれ!
+      const base64ImageWithoutPrefix = base64Image.replace(/^data:\w+\/\w+;base64,/, '');
+
+      // 画像を表示。
+      // <img src="data:image/png;base64,xxxxx..." />
+      const imageElement = document.getElementById('image-for-video1');
+      imageElement.setAttribute('src', base64Image);
 
     };
 
