@@ -284,10 +284,9 @@
 
     const grault = async function () {
 
-      // 実験的機能。
-      // aspectRatio が設定できるのなら、そのままいく。
-      // できない(iOS Safari を使っている?)のなら、 facingMode:user だけを指定していく。
-
+      // NOTE: iOS Safari では……
+      // aspectRatio: 1.77 だと env のカメラが使われてしまう。
+      // exact: 'user' を使うと黒いところが出るもののインカメラが使える。
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: false,
