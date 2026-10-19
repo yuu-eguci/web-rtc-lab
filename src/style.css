@@ -1,0 +1,12 @@
+.video-main {
+  height: 200px;
+}
+
+.video-sub {
+  height: 100px;
+}
+
+/* user カメラは鏡のように左右反転して表示する。 */
+.mirrored {
+  transform: scaleX(-1);
+}
