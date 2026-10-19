@@ -6,7 +6,7 @@
   height: 100px;
 }
 
-/* user カメラは鏡のように左右反転して表示する。 */
+/* user カメラは左右反転して表示します。 */
 .mirrored {
   transform: scaleX(-1);
 }

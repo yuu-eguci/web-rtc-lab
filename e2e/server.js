@@ -1,4 +1,4 @@
-// テスト用の小さな静的ファイルサーバ。 Docker の nginx と同じくリポジトリ直下を配信する。
+// テスト用の静的ファイルサーバです。 Docker の nginx と同じくリポジトリ直下を配信します。
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { createServer } from 'node:http';

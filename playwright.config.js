@@ -7,7 +7,7 @@ export default defineConfig({
     ...devices['Desktop Chrome'],
     permissions: ['camera'],
     launchOptions: {
-      // Chromium の fake camera を使う。本物のカメラでの動作は保証しない。
+      // Chromium の fake camera を使います。本物のカメラでの動作は別途確認が必要です。
       args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'],
     },
   },

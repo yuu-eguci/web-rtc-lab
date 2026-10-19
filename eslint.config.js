@@ -13,7 +13,7 @@ export default [
     languageOptions: { globals: globals.node },
   },
   {
-    // page.evaluate() のコールバックはブラウザで動く。
+    // page.evaluate() のコールバックはブラウザで動きます。
     files: ['e2e/**/*.spec.js'],
     languageOptions: { globals: globals.browser },
   },

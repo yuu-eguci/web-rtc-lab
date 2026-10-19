@@ -1,11 +1,11 @@
 // Camera helpers. They take mediaDevices, elements and document as arguments so they can be unit tested.
 
-// NOTE: iOS Safari では……
-// aspectRatio: 1.77 だと env のカメラが使われてしまう。
-// exact: 'user' を使うと黒いところが出るもののインカメラが使える。
 export const VIDEO_CONSTRAINTS = {
   user: { facingMode: 'user' },
   environment: { aspectRatio: 1.777777, facingMode: 'environment' },
+  // iOS Safari での実験メモです (2020-11 時点。その後は再確認していません)。
+  // aspectRatio: 1.77 と facingMode: 'user' の指定では env のカメラが使われました。
+  // exact: 'user' では黒い部分が出ましたが、インカメラを使えました。
   experiment: { aspectRatio: { exact: 1.777777 }, facingMode: { exact: 'user' } },
 };
 
@@ -14,7 +14,7 @@ export const startCamera = async (mediaDevices, video, videoConstraints) => {
     return false;
   }
   const stream = await mediaDevices.getUserMedia({ audio: false, video: videoConstraints });
-  // 待っている間に別のストリームが付いていたら (ボタンの連打など) 、カメラを点けっぱなしにしないよう止める。
+  // 待機中に別のストリームが付いた場合は、新しいストリームを止めます。
   if (video.srcObject !== null) {
     stopTracks(stream);
     return false;
@@ -45,8 +45,8 @@ export const stopVideos = (videos) => {
   }
 };
 
-// canvas に video のフレームを貼り付けて、 base64 の data URL として取り出す。
-// base64 の prefix を削除するなら dataUrl.replace(/^data:\w+\/\w+;base64,/, '')
+// canvas に video のフレームを描画し、 base64 の data URL として取り出します。
+// base64 の prefix は dataUrl.replace(/^data:\w+\/\w+;base64,/, '') で削除できます。
 export const capturePhoto = (doc, video) => {
   const { videoWidth: width, videoHeight: height } = video;
   if (!width || !height) {

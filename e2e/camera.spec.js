@@ -9,7 +9,7 @@ let consoleErrors;
 test.beforeEach(async ({ page }) => {
   alerts = [];
   consoleErrors = [];
-  // CSP 違反や SRI の不一致はコンソールエラーになる。
+  // CSP 違反や SRI の不一致はコンソールエラーになります。
   page.on('console', (message) => {
     if (message.type() === 'error') {
       consoleErrors.push(message.text());
@@ -66,7 +66,7 @@ test('starts the user and environment cameras, then stops every stream', async (
 });
 
 test('reports an error when the experiment constraints cannot be satisfied', async ({ page }) => {
-  // Chromium の fake camera は facingMode を持たないので、 exact: 'user' は満たせない。
+  // Chromium の fake camera は facingMode を持たないため、 exact: 'user' を満たせません。
   await page.getByRole('button', { name: 'Experiment' }).click();
 
   await expect.poll(() => alerts).toEqual([expect.stringContaining('OverconstrainedError')]);
