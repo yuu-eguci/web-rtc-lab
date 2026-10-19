@@ -1,0 +1,16 @@
+services:
+  web:
+    build:
+      context: .
+      target: web
+    ports:
+      - "127.0.0.1:8080:80"
+
+  check:
+    build:
+      context: .
+      target: check
+    environment:
+      CI: "true"
+    profiles:
+      - tools
