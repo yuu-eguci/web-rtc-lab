@@ -5,11 +5,11 @@ import { createServer } from 'node:http';
 import { extname, join, normalize } from 'node:path';
 
 const root = join(import.meta.dirname, '..');
-const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
+const types: Record<string, string> = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
 
 createServer(async (req, res) => {
   try {
-    const path = normalize(decodeURIComponent(new URL(req.url, 'http://localhost').pathname));
+    const path = normalize(decodeURIComponent(new URL(req.url!, 'http://localhost').pathname));
     const file = join(root, path.endsWith('/') ? `${path}index.html` : path);
     if (!file.startsWith(root) || !(await stat(file)).isFile()) {
       throw new Error('not found');

@@ -13,7 +13,7 @@ export default defineConfig({
     },
   },
   webServer: {
-    command: 'node e2e/server.js',
+    command: 'node e2e/server.ts',
     url: 'http://localhost:4173',
     reuseExistingServer: false,
   },

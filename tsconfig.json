@@ -1,0 +1,16 @@
+{
+  // テストと設定ファイルの型チェック用です。 src/ はテストから import されるので一緒にチェックされます。
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "nodenext",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "types": ["node"],
+    "strict": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": ["test", "e2e", "playwright.config.ts"]
+}

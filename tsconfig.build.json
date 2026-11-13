@@ -1,0 +1,11 @@
+{
+  // ブラウザで動く src/*.ts を、同じ場所の src/*.js に出力します。
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [],
+    "allowImportingTsExtensions": false,
+    "noEmit": false,
+    "newLine": "lf"
+  },
+  "include": ["src"]
+}

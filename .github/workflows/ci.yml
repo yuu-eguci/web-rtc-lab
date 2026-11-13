@@ -18,6 +18,9 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run typecheck
+      # コミット済みの src/*.js が src/*.ts のビルド結果と一致することを確認します。
+      - run: npm run build && git diff --exit-code && test -z "$(git status --porcelain)"
       - run: npm run lint
       - run: npm test
       - run: npx playwright install --with-deps chromium
