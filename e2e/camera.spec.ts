@@ -1,10 +1,18 @@
 // Browser tests with Chromium's fake camera. They do not prove behavior with a real camera.
-import { expect, test } from '@playwright/test';
+import { type Locator, expect, test } from '@playwright/test';
 
-const isPlaying = (locator) => locator.evaluate((video) => video.srcObject !== null && video.videoWidth > 0);
+// page.evaluate() で止める前のトラックを覚えておく場所です。
+declare global {
+  interface Window {
+    tracks: MediaStreamTrack[];
+  }
+}
 
-let alerts;
-let consoleErrors;
+const isPlaying = (locator: Locator) =>
+  locator.evaluate((video: HTMLVideoElement) => video.srcObject !== null && video.videoWidth > 0);
+
+let alerts: string[];
+let consoleErrors: string[];
 
 test.beforeEach(async ({ page }) => {
   alerts = [];
@@ -54,14 +62,18 @@ test('starts the user and environment cameras, then stops every stream', async (
   await page.getByRole('button', { name: 'facingMode:user +' }).click();
   await page.getByRole('button', { name: 'facingMode:env +' }).click();
   const videos = page.locator('video');
-  await expect.poll(() => videos.evaluateAll((all) => all.filter((v) => v.srcObject).length)).toBe(6);
+  await expect
+    .poll(() => videos.evaluateAll((all: HTMLVideoElement[]) => all.filter((v) => v.srcObject).length))
+    .toBe(6);
   await page.evaluate(() => {
-    window.tracks = [...document.querySelectorAll('video')].flatMap((v) => v.srcObject?.getTracks() ?? []);
+    window.tracks = [...document.querySelectorAll('video')].flatMap(
+      (v) => (v.srcObject as MediaStream | null)?.getTracks() ?? [],
+    );
   });
 
   await page.getByRole('button', { name: 'Stop stream' }).click();
 
-  expect(await videos.evaluateAll((all) => all.filter((v) => v.srcObject).length)).toBe(0);
+  expect(await videos.evaluateAll((all: HTMLVideoElement[]) => all.filter((v) => v.srcObject).length)).toBe(0);
   expect(await page.evaluate(() => window.tracks.map((track) => track.readyState))).toEqual(Array(6).fill('ended'));
 });
 

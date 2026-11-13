@@ -5,7 +5,7 @@ web-rtc-lab
 
 - Docker: 対応!
 - Node.js: 24! (ビルド、 lint、テスト用。 Volta で 24.22.0 に固定)
-- TypeScript: 6.0!
+- TypeScript: 6.0! (typescript-eslint が対応している 6.0 系に固定)
 - Linter: ESLint 10 + typescript-eslint!
 - Test: node:test (unit) + Playwright 1.64 (browser)!
 - Bootstrap: 5.3 (CSS のみ、CDN + SRI)
@@ -45,10 +45,12 @@ docker compose run --rm --build check
 - `index.html`: 実験ページ。
 - `src/camera.ts`: カメラ操作のロジック (DOM に依存しないので unit test できる)。
 - `src/main.ts`: ボタンと `src/camera.ts` をつなぐ。
-- `src/*.js`: `npm run build` で `src/*.ts` から出力したもの。直接編集しない。
+- `src/*.js`: `npm run build` で `src/*.ts` から出力したもの。ブラウザはこちらを読む。直接編集しない。
 - `src/style.css`: ページのスタイル。
 - `test/`: `node:test` による unit test。
 - `e2e/`: Playwright によるブラウザテスト。 Chromium の fake camera を使う。
+- `tsconfig.build.json`: `src/` のビルドと型チェックの設定。
+- `tsconfig.json`: `test/`、 `e2e/`、 `playwright.config.ts` の型チェックの設定。
 - 古い実験ページ `index2.html` (autoplay muted の比較や width/height 指定の実験) は削除した。 git 履歴 (5332ea4 まで) に残っている。
 
 ## 開発
@@ -63,11 +65,11 @@ npm test           # unit test
 npm run test:e2e   # browser test (fake camera)
 ```
 
-`src/*.ts` を変えたら `npm run build` して、出力された `src/*.js` も一緒にコミットする。
-GitHub Pages はリポジトリをそのまま配信するため。
-CI は `npm run build` の後に差分がないことを確認する。
+GitHub Pages と Docker の `web` はリポジトリをビルドせずにそのまま配信する。
+そのため `src/*.ts` を変えたら `npm run build` して、出力された `src/*.js` も一緒にコミットする。
+CI は `npm run build` の後に差分が出ないことを確認する。
 
-unit test と `e2e/server.ts` は Node.js の type stripping で `.ts` のまま動かす。
+unit test と `e2e/server.ts` は Node.js の type stripping で `.ts` のまま動かす (ビルド不要)。
 
 ブラウザテストは Chromium の fake camera を使う。
 本物のカメラやスマートフォンでの動作は、実機で確認する。

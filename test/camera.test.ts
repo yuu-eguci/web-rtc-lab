@@ -1,4 +1,4 @@
-// Unit tests for src/camera.js.
+// Unit tests for src/camera.ts.
 // These use fake streams and fake elements, so they prove the logic only, not real camera behavior.
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
@@ -9,29 +9,35 @@ import {
   shareStream,
   startCamera,
   stopVideos,
-} from '../src/camera.js';
+} from '../src/camera.ts';
 
-const fakeTrack = () => ({
+// 偽物は使う部分だけを実装するので、 DOM の型には as unknown as で合わせます。
+type FakeTrack = { stopped: number; stop(): void };
+type FakeStream = MediaStream & { tracks: FakeTrack[] };
+
+const fakeTrack = (): FakeTrack => ({
   stopped: 0,
   stop() {
     this.stopped += 1;
   },
 });
 
-const fakeStream = (tracks = [fakeTrack()]) => ({ tracks, getTracks: () => tracks });
+const fakeStream = (tracks = [fakeTrack()]) => ({ tracks, getTracks: () => tracks }) as unknown as FakeStream;
 
-const fakeVideo = (props = {}) => ({ srcObject: null, ...props });
+const fakeVideo = (props: Partial<HTMLVideoElement> = {}) => ({ srcObject: null, ...props }) as HTMLVideoElement;
+
+const fakeMediaDevices = (props: Partial<MediaDevices>) => props as MediaDevices;
 
 describe('startCamera', () => {
   it('requests a video-only stream and attaches it to the video', async () => {
     const stream = fakeStream();
-    const calls = [];
-    const mediaDevices = {
+    const calls: (MediaStreamConstraints | undefined)[] = [];
+    const mediaDevices = fakeMediaDevices({
       getUserMedia: async (constraints) => {
         calls.push(constraints);
         return stream;
       },
-    };
+    });
     const video = fakeVideo();
 
     const started = await startCamera(mediaDevices, video, { facingMode: 'user' });
@@ -43,9 +49,9 @@ describe('startCamera', () => {
 
   it('does not open a second stream when the video is already playing one', async () => {
     const existing = fakeStream();
-    const mediaDevices = {
+    const mediaDevices = fakeMediaDevices({
       getUserMedia: async () => assert.fail('getUserMedia must not be called'),
-    };
+    });
     const video = fakeVideo({ srcObject: existing });
 
     const started = await startCamera(mediaDevices, video, { facingMode: 'user' });
@@ -58,7 +64,7 @@ describe('startCamera', () => {
     const first = fakeStream();
     const second = fakeStream();
     const pending = [first, second];
-    const mediaDevices = { getUserMedia: async () => pending.shift() };
+    const mediaDevices = fakeMediaDevices({ getUserMedia: async () => pending.shift()! });
     const video = fakeVideo();
 
     const results = await Promise.all([
@@ -73,11 +79,11 @@ describe('startCamera', () => {
   });
 
   it('propagates getUserMedia errors such as a denied permission', async () => {
-    const mediaDevices = {
+    const mediaDevices = fakeMediaDevices({
       getUserMedia: async () => {
         throw new Error('NotAllowedError');
       },
-    };
+    });
     const video = fakeVideo();
 
     await assert.rejects(startCamera(mediaDevices, video, {}), /NotAllowedError/);
@@ -121,15 +127,15 @@ describe('capturePhoto', () => {
     const canvas = {
       width: 0,
       height: 0,
-      drawn: null,
+      drawn: null as unknown[] | null,
       getContext: () => ({
-        drawImage: (...args) => {
+        drawImage: (...args: unknown[]) => {
           canvas.drawn = args;
         },
       }),
-      toDataURL: (type) => `data:${type};base64,AAAA`,
+      toDataURL: (type: string) => `data:${type};base64,AAAA`,
     };
-    return { canvas, createElement: () => canvas };
+    return { canvas, createElement: () => canvas } as unknown as Document & { canvas: typeof canvas };
   };
 
   it('draws the frame at the intrinsic video size and returns a JPEG data URL', () => {
@@ -155,9 +161,9 @@ describe('capturePhoto', () => {
 
 describe('describeSupportedConstraints', () => {
   it('formats the supported constraints as JSON', () => {
-    const mediaDevices = {
+    const mediaDevices = fakeMediaDevices({
       getSupportedConstraints: () => ({ facingMode: true, aspectRatio: true }),
-    };
+    });
 
     assert.equal(describeSupportedConstraints(mediaDevices), '{"facingMode":true,"aspectRatio":true}');
   });
