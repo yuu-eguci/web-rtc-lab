@@ -11,7 +11,7 @@ import {
   stopVideos,
 } from '../src/camera.ts';
 
-// 偽物は使う部分だけを実装するので、 DOM の型には as unknown as で合わせます。
+// 偽物は使う部分だけを実装するので、 DOM の型には型アサーションで合わせます。
 type FakeTrack = { stopped: number; stop(): void };
 type FakeStream = MediaStream & { tracks: FakeTrack[] };
 
@@ -26,18 +26,16 @@ const fakeStream = (tracks = [fakeTrack()]) => ({ tracks, getTracks: () => track
 
 const fakeVideo = (props: Partial<HTMLVideoElement> = {}) => ({ srcObject: null, ...props }) as HTMLVideoElement;
 
-const fakeMediaDevices = (props: Partial<MediaDevices>) => props as MediaDevices;
-
 describe('startCamera', () => {
   it('requests a video-only stream and attaches it to the video', async () => {
     const stream = fakeStream();
     const calls: (MediaStreamConstraints | undefined)[] = [];
-    const mediaDevices = fakeMediaDevices({
-      getUserMedia: async (constraints) => {
+    const mediaDevices = {
+      getUserMedia: async (constraints?: MediaStreamConstraints) => {
         calls.push(constraints);
         return stream;
       },
-    });
+    };
     const video = fakeVideo();
 
     const started = await startCamera(mediaDevices, video, { facingMode: 'user' });
@@ -49,9 +47,9 @@ describe('startCamera', () => {
 
   it('does not open a second stream when the video is already playing one', async () => {
     const existing = fakeStream();
-    const mediaDevices = fakeMediaDevices({
+    const mediaDevices = {
       getUserMedia: async () => assert.fail('getUserMedia must not be called'),
-    });
+    };
     const video = fakeVideo({ srcObject: existing });
 
     const started = await startCamera(mediaDevices, video, { facingMode: 'user' });
@@ -64,7 +62,7 @@ describe('startCamera', () => {
     const first = fakeStream();
     const second = fakeStream();
     const pending = [first, second];
-    const mediaDevices = fakeMediaDevices({ getUserMedia: async () => pending.shift()! });
+    const mediaDevices = { getUserMedia: async () => pending.shift()! };
     const video = fakeVideo();
 
     const results = await Promise.all([
@@ -79,11 +77,11 @@ describe('startCamera', () => {
   });
 
   it('propagates getUserMedia errors such as a denied permission', async () => {
-    const mediaDevices = fakeMediaDevices({
+    const mediaDevices = {
       getUserMedia: async () => {
         throw new Error('NotAllowedError');
       },
-    });
+    };
     const video = fakeVideo();
 
     await assert.rejects(startCamera(mediaDevices, video, {}), /NotAllowedError/);
@@ -161,9 +159,9 @@ describe('capturePhoto', () => {
 
 describe('describeSupportedConstraints', () => {
   it('formats the supported constraints as JSON', () => {
-    const mediaDevices = fakeMediaDevices({
+    const mediaDevices = {
       getSupportedConstraints: () => ({ facingMode: true, aspectRatio: true }),
-    });
+    };
 
     assert.equal(describeSupportedConstraints(mediaDevices), '{"facingMode":true,"aspectRatio":true}');
   });

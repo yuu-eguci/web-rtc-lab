@@ -43,7 +43,9 @@ export const shareStream = (source: StreamTarget, targets: StreamTarget[]): void
 };
 
 export const stopVideos = (videos: StreamTarget[]): void => {
-  const streams = new Set(videos.map((video) => video.srcObject as MediaStream | null).filter((stream) => stream !== null));
+  const streams = new Set(
+    videos.map((video) => video.srcObject as MediaStream | null).filter((stream) => stream !== null),
+  );
   for (const stream of streams) {
     stopTracks(stream);
   }
